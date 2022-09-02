@@ -17,10 +17,15 @@ const TodoSchema = new mongoose.Schema({
     type: String
   },
 
+  duration: {
+    type: String
+  },
+
   Date: {
     type: Date,
     default: Date.now
   }
+  
 })
 
 module.exports = mongoose.model('Todo', TodoSchema)
