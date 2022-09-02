@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
 </head>
+
 <body>
-    <h1>Todos</h1>
-    <ul>
-    <% todos.forEach( el => { %>
-            <li class='todoItem' data-id='<%=el._id%>'>
-                <span class='<%= el.completed === true ? 'completed' : 'not'%>'><%= el.todo %></span>
-                <span class='del'> Delete </span>
-            </li>
-    <% }) %>    
-    </ul>
-
-    <h2><%= user.userName %> has <%= left %> things left to do.</h2>
-
-    <form action="/todos/createTodo" method='POST'>
-        <input type="text" placeholder="Enter Todo Item" name='todoItem'>
-        <input type="submit">
-    </form>
+    <h2 class="center">Todos</h2>
+    <div class="container">
+        <ul>
+            <% todos.forEach( el=> { %>
+                <li class='todoItem' data-id='<%=el._id%>'>
+                    <span class='<%= el.completed === true ? ' completed' : 'not' %> todo'><%= el.todo %></span>
+                    <span class='btn del' style="margin-left: 30px;"> Delete </span>
+                </li>
+                <% }) %>
+        </ul>
+        <h5 class="center">
+            <%= user.userName %> has <%= left %> things left to do.
+        </h5>
+        <form class="row" action="/todos/createTodo" method='POST'>
+            <input class="col s8" type="text" placeholder="Enter Todo Item" name='todoItem'>
+            <input class="btn col s3" style="margin-left: 20px;" type="submit">
+        </form>
+    </div>
 
     <a href="/logout">Logout</a>
 
     <script src="js/main.js"></script>
 </body>
+
 </html>
