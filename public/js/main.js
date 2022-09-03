@@ -15,7 +15,7 @@ Array.from(todoComplete).forEach((el)=>{
     el.addEventListener('click', markIncomplete)
 })
 
-startButton.addEventListener('click', startPomodoro)
+startButton.addEventListener('click', startTimer)
 
 async function deleteTodo(){
     const todoId = this.parentNode.dataset.id
@@ -73,42 +73,74 @@ async function markIncomplete(){
 
 
 // Pomodoro timer and break session
-function startTimer(duration, display){
-    let timer = duration, minutes, seconds;
-    setInterval(function () {
-        minutes = parseInt(timer / 60, 10)
-        seconds = parseInt(timer % 60, 10);
-
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-
-        display.textContent = minutes + ":" + seconds;
-
-        if (--timer < 0) {
-            timer = duration
+document.addEventListener('DOMContentLoaded', () => {
+    switchMode('pomodoro');
+});
+const timer = {
+    pomodoro: 25,
+    shortBreak: 5,
+    sessions: 0,
+  };
+function getRemainingTime(endTime) {
+    const currentTime = Date.parse(new Date());
+    const difference = endTime - currentTime;
+  
+    const total = Number.parseInt(difference / 1000, 10);
+    const minutes = Number.parseInt((total / 60) % 60, 10);
+    const seconds = Number.parseInt(total % 60, 10);
+  
+    return {
+      total,
+      minutes,
+      seconds,
+    };
+}
+function startTimer() {
+    let { total } = timer.remainingTime;
+    const endTime = Date.parse(new Date()) + total * 1000;
+  
+    if (timer.mode === 'pomodoro') timer.sessions++;
+  
+    interval = setInterval(function() {
+      timer.remainingTime = getRemainingTime(endTime);
+      updateClock();
+  
+      total = timer.remainingTime.total;
+      if (total <= 0) {
+        clearInterval(interval);
+  
+        switch (timer.mode) {
+          case 'pomodoro':
+            
+              switchMode('shortBreak');
+            
+            break;
+          default:
+            switchMode('pomodoro');
         }
+  
+        startTimer();
+      }
     }, 1000);
 }
-function startPomodoro () {
-//default pomodoro session 25 min
-    const twentyFive = 60 * 25,
-        display = document.querySelector('#time');
-    startTimer(twentyFive, display);
-    breakTime()
-};
-function breakTime(){
-//default break time 5 min
-    const fiveMinutes = 60 * 5,
-        display = document.querySelector('#time');
-    startTimer(fiveMinutes, display);
+
+function updateClock() {
+    const { remainingTime } = timer;
+    const minutes = `${remainingTime.minutes}`.padStart(2, '0');
+    const seconds = `${remainingTime.seconds}`.padStart(2, '0');
+
+    const display = document.querySelector('#time');
+    display.textContent = minutes + ":" + seconds;
 }
-async function sessionCount() {
-// session count ++
-// --> code to be added
-    try { 
-        let response = await fetch()
-    } catch (err) {
-        console.err(err)
-    }
-//
-}
+
+function switchMode(mode) {
+    timer.mode = mode;
+    timer.remainingTime = {
+      total: timer[mode] * 60,
+      minutes: timer[mode],
+      seconds: 0,
+    };
+  
+    updateClock();
+  }
+  

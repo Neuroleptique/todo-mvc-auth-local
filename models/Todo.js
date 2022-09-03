@@ -15,10 +15,12 @@ const TodoSchema = new mongoose.Schema({
   },
   sessionCount: {
     type: Number,
+    default: 0
   },
 
   duration: {
-    type: String
+    type: Number,
+    default: 0
   },
 
   Date: {

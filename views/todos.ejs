@@ -12,11 +12,14 @@
 
 <body>
     <h2 class="center">Todos</h2>
+    <div class="container" id="time"></div>
     <div class="container">
         <ul>
             <% todos.forEach( el=> { %>
                 <li class='todoItem' data-id='<%=el._id%>'>
                     <span class='<%= el.completed === true ? ' completed' : 'not' %> todo'><%= el.todo %></span>
+
+                    <span class='btn start' style="margin-left: 30px;"> Start Working </span>
                     <span class='btn del' style="margin-left: 30px;"> Delete </span>
                 </li>
                 <% }) %>
