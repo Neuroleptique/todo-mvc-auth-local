@@ -14,7 +14,7 @@ const TodoSchema = new mongoose.Schema({
     required: true
   },
   sessionCount: {
-    type: String
+    type: Number,
   },
 
   duration: {
