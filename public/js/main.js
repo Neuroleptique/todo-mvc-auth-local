@@ -1,7 +1,7 @@
 const deleteBtn = document.querySelectorAll('.del')
 const todoItem = document.querySelectorAll('span.not')
 const todoComplete = document.querySelectorAll('span.completed')
-const startButton = document.querySelector('.start').addEventListener('click', startPomodoro)
+const startButton = document.querySelector('.start')
 
 Array.from(deleteBtn).forEach((el)=>{
     el.addEventListener('click', deleteTodo)
@@ -14,6 +14,8 @@ Array.from(todoItem).forEach((el)=>{
 Array.from(todoComplete).forEach((el)=>{
     el.addEventListener('click', markIncomplete)
 })
+
+startButton.addEventListener('click', startPomodoro)
 
 async function deleteTodo(){
     const todoId = this.parentNode.dataset.id
@@ -84,17 +86,18 @@ function startTimer(duration, display){
 
         if (--timer < 0) {
             timer = duration
-            breakTime()
         }
     }, 1000);
 }
 function startPomodoro () {
+//default pomodoro session 25 min
     const twentyFive = 60 * 25,
         display = document.querySelector('#time');
     startTimer(twentyFive, display);
+    breakTime()
 };
 function breakTime(){
-
+//default break time 5 min
     const fiveMinutes = 60 * 5,
         display = document.querySelector('#time');
     startTimer(fiveMinutes, display);
