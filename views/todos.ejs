@@ -12,29 +12,79 @@
 
 <body>
     <h2 class="center">Todos</h2>
-    <div class="container" id="time"></div>
-    <div class="container">
-        <ul>
-            <% todos.forEach( el=> { %>
-                <li class='todoItem' data-id='<%=el._id%>'>
-                    <span class='<%= el.completed === true ? ' completed' : 'not' %> todo'><%= el.todo %></span>
+    <div class="card container center timer">
+        <h3 id="time"></h3>
+        <h4><%= user.userName %> has <%= left %> things left to do.</h4>
+    </div>
 
-                    <span class='btn start' style="margin-left: 30px;"> Start Working </span>
-                    <span class='btn del' style="margin-left: 30px;"> Delete </span>
-                </li>
-                <% }) %>
-        </ul>
-        <h5 class="center">
-            <%= user.userName %> has <%= left %> things left to do.
-        </h5>
-        <form class="row" action="/todos/createTodo" method='POST'>
+    </div>
+    <div class="card container tasks">
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>
+                        Task
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for( let i=0; i < todos.length; i++ ) { %>
+                    <% if (!todos[i].completed) { %>
+                        <tr data-id="<%= todos[i]._id %>">
+                            <td>
+                                <span class="task">
+                                    <%= todos[i].todo %>
+                                </span>
+                            </td>
+                            <td>
+                                <span class='btn hoverable start'> Start Working </span>
+                                <span class='btn hoverable del'> Delete </span>
+                                <span class="btn hoverable complete">Completed</span>
+                            </td>
+                        </tr>
+                    <% } %>
+                    <% } %>
+            </tbody>
+        </table>
+        <form class="row task-input" action="/todos/createTodo" method='POST'>
             <input class="col s8" type="text" placeholder="Enter Todo Item" name='todoItem'>
             <input class="btn col s3" style="margin-left: 20px;" type="submit">
         </form>
     </div>
-
-    <a href="/logout">Logout</a>
-
+    <div class="card container tasks">
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>
+                        Completed Tasks
+                    </th>
+                    <th>
+                        Total Time Taken
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for( let i=0; i < todos.length; i++ ) { %>
+                    <% if (todos[i].completed) { %>
+                        <tr data-id="<%= todos[i]._id %>">
+                            <td>
+                                <span class="task">
+                                    <%= todos[i].todo %>
+                                </span>
+                            </td>
+                            <td>
+                                <!-- Put total time taken for the task here -->
+                            </td>
+                            <td>
+                                <span class='btn hoverable del'> Delete </span>
+                            </td>
+                        </tr>
+                    <% } %>
+                    <% } %>
+            </tbody>
+        </table>
+    </div>
+        <div class="container center logout"><a class="btn hoverable logout-btn col s8" href="/logout">Logout</a></div>
     <script src="js/main.js"></script>
 </body>
 
