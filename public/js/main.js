@@ -3,6 +3,8 @@ const todoItem = document.querySelectorAll('.complete')
 const todoComplete = document.querySelectorAll('span.completed')
 const startButton = document.querySelector('.start')
 
+
+
 Array.from(deleteBtn).forEach((el) => {
 	el.addEventListener('click', deleteTodo)
 })
@@ -38,18 +40,26 @@ async function deleteTodo() {
 
 async function markComplete() {
 	const todoId = this.parentNode.parentNode.dataset.id
-	console.log('click')
+	
+	// get session count 
+
+	//get duration 
+	const timeDuration = document.querySelector('#time')
+	const calculatedtimeDuration = 25 - Math.floor(parseInt(timeDuration.innerText))
+	
+	
 	try {
 		const response = await fetch('todos/markComplete', {
 			method: 'put',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
-				todoIdFromJSFile: todoId,
+				'todoIdFromJSFile': todoId,
+				'timeDurationFromJSFile': calculatedtimeDuration
 			}),
 		})
 		const data = await response.json()
 		console.log(data)
-		location.reload()
+		// location.reload()
 	} catch (err) {
 		console.log(err)
 	}
@@ -62,7 +72,7 @@ async function markIncomplete() {
 			method: 'put',
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
-				todoIdFromJSFile: todoId,
+				'todoIdFromJSFile': todoId,
 			}),
 		})
 		const data = await response.json()
