@@ -12,12 +12,12 @@
 
 <body>
     
-    <h6>Welcome <%= user.userName %></h6>
+    <h6>Welcome <%= user.userName.replace(/\w/, c => c.toUpperCase()) %></h6>
     <h2 class="center">Todos</h2>
     <div class="card container center timer">
         <h3 id="timerMode"></h3>
         <h3 id="time"></h3>
-        <h4><%= user.userName %> has <%= left %> things left to do.</h4>
+        <h4><%= user.userName.replace(/\w/, c => c.toUpperCase()) %> has <%= left %> <%- left <= 1 ? 'task' : 'tasks' %> to do.</h4>
     </div>
 
     </div>
@@ -50,8 +50,8 @@
             </tbody>
         </table>
         <form class="row task-input" action="/todos/createTodo" method='POST'>
-            <input class="col s8" type="text" placeholder="Enter Todo Item" name='todoItem'>
-            <input class="btn col s3" style="margin-left: 20px;" type="submit">
+            <input class="col s8" type="text" placeholder="Enter Task" name='todoItem'>
+            <button class="btn col s3" style="margin-left: 20px;" type="submit">Add Task</button>
         </form>
     </div>
     <div class="card container tasks">
@@ -62,7 +62,7 @@
                         Completed Tasks
                     </th>
                     <th>
-                        Total Time Taken
+                        Total Time Taken (mins)
                     </th>
                 </tr>
             </thead>
