@@ -15,9 +15,9 @@ Array.from(todoItem).forEach((el) => {
 	el.addEventListener('click', markComplete)
 })
 
-Array.from(todoComplete).forEach((el) => {
-	el.addEventListener('click', markIncomplete)
-})
+// Array.from(todoComplete).forEach((el) => {
+// 	el.addEventListener('click', markIncomplete)
+// })
 
 // startButton.addEventListener('click', startTimer)
 
@@ -48,7 +48,8 @@ async function markComplete() {
 	//get duration 
 	const timeDuration = document.querySelector('#time')
 	const calculatedtimeDuration = 25 - Math.floor(parseInt(timeDuration.innerText))
-	
+	// if task completed after a few pomodoro session, this line will add last session's duration to the total minutes spent
+	timer.totalMinute += calculatedtimeDuration
 	
 	try {
 		const response = await fetch('todos/markComplete', {
@@ -56,7 +57,7 @@ async function markComplete() {
 			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
 				'todoIdFromJSFile': todoId,
-				'timeDurationFromJSFile': calculatedtimeDuration
+				'timeDurationFromJSFile': timer.totalMinute
 			}),
 		})
 		const data = await response.json()
@@ -67,23 +68,23 @@ async function markComplete() {
 	}
 }
 
-async function markIncomplete() {
-	const todoId = this.parentNode.dataset.id
-	try {
-		const response = await fetch('todos/markIncomplete', {
-			method: 'put',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify({
-				'todoIdFromJSFile': todoId,
-			}),
-		})
-		const data = await response.json()
-		console.log(data)
-		location.reload()
-	} catch (err) {
-		console.log(err)
-	}
-}
+// async function markIncomplete() {
+// 	const todoId = this.parentNode.dataset.id
+// 	try {
+// 		const response = await fetch('todos/markIncomplete', {
+// 			method: 'put',
+// 			headers: { 'Content-type': 'application/json' },
+// 			body: JSON.stringify({
+// 				'todoIdFromJSFile': todoId,
+// 			}),
+// 		})
+// 		const data = await response.json()
+// 		console.log(data)
+// 		location.reload()
+// 	} catch (err) {
+// 		console.log(err)
+// 	}
+// }
 
 // Pomodoro timer and break session
 document.addEventListener('DOMContentLoaded', () => {
@@ -93,6 +94,7 @@ const timer = {
 	pomodoro: 25,
 	shortBreak: 5,
 	sessions: 0,
+	totalMinute: 0
 }
 function getRemainingTime(endTime) {
 	const currentTime = Date.parse(new Date())
@@ -124,14 +126,18 @@ function startTimer() {
 
 			switch (timer.mode) {
 				case 'pomodoro':
+	// Add worked duration to totalMinute
+					timer.totalMinute += timer.pomodoro
+					timer.sessions += 1
 					switchMode('shortBreak')
-
+	// Start break after pomodoro session
+					startTimer()
 					break
 				default:
 					switchMode('pomodoro')
+	
 			}
-
-			startTimer()
+	// Move startTimer() to conditional	statement above because we want timer to stop after break	
 		}
 	}, 1000)
 }
@@ -141,8 +147,10 @@ function updateClock() {
 	const minutes = `${remainingTime.minutes}`.padStart(2, '0')
 	const seconds = `${remainingTime.seconds}`.padStart(2, '0')
 
-	const display = document.querySelector('#time')
-	display.textContent = minutes + ':' + seconds
+	const modeDisplay = document.getElementById('timerMode')
+	modeDisplay.textContent = timer.mode
+	const timeDisplay = document.querySelector('#time')
+	timeDisplay.textContent = minutes + ':' + seconds
 }
 
 function switchMode(mode) {
