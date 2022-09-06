@@ -34,6 +34,13 @@
                     <th>
                         Task
                     </th>
+
+                    <th>
+                        Date Created
+                    </th>
+                    <th>
+                        Urgency
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -45,11 +52,7 @@
                                     <%= todos[i].todo %>
                                 </span>
                             </td>
-                            <td>
-                                
-                                <span class='btn hoverable del'> Delete </span>
-                                <span class="btn hoverable complete">Completed</span>
-                            </td>
+
                             <td>
                                 <span>
                                     <%= todos[i].date || todos[i].Date %>
@@ -57,9 +60,16 @@
                             </td>
                             <td>
                                 <span>
-                                    <% if(Math.ceil((new Date().getTime() - new Date(todos[i].Date).getTime()) / (1000*60*60*24) ) >= 1)  { %>
-                                        <tr>low</tr>
+                                    <% if(Math.ceil((new Date().getTime() - new Date(todos[i].Date).getTime()) / (1000*60*60*24) ) <= 5)  { %>
+                                        Urgent!
+                                    <% } %>
+                                    
                                 </span>
+                            </td>
+                            <td>
+                                
+                                <span class='btn hoverable del'> Delete </span>
+                                <span class="btn hoverable complete">Completed</span>
                             </td>
                         </tr>
                     <% } %>
