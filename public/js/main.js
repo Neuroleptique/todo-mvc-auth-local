@@ -2,6 +2,7 @@ const deleteBtn = document.querySelectorAll('.del')
 const todoItem = document.querySelectorAll('.complete')
 const todoComplete = document.querySelectorAll('span.completed')
 const startButton = document.querySelectorAll('.start')
+const focusTask = document.querySelectorAll('tr')
 
 Array.from(startButton).forEach((el) => {
 	el.addEventListener('click', startTimer)
@@ -15,11 +16,14 @@ Array.from(todoItem).forEach((el) => {
 	el.addEventListener('click', markComplete)
 })
 
+Array.from(focusTask).forEach((el) => {
+	el.addEventListener('click', focusColor)
+})
+
 // Array.from(todoComplete).forEach((el) => {
 // 	el.addEventListener('click', markIncomplete)
 // })
 
-// startButton.addEventListener('click', startTimer)
 
 async function deleteTodo() {
 	const todoId = this.parentNode.parentNode.dataset.id
@@ -86,6 +90,10 @@ async function markComplete() {
 // 	}
 // }
 
+function focusColor(){
+	console.log('change color')
+}
+
 // Pomodoro timer and break session
 document.addEventListener('DOMContentLoaded', () => {
 	switchMode('pomodoro')
@@ -148,7 +156,7 @@ function updateClock() {
 	const seconds = `${remainingTime.seconds}`.padStart(2, '0')
 
 	const modeDisplay = document.getElementById('timerMode')
-	modeDisplay.textContent = timer.mode
+	modeDisplay.textContent = timer.mode === 'pomodoro' ? 'Pomodoro' : 'Short Break'
 	const timeDisplay = document.querySelector('#time')
 	timeDisplay.textContent = minutes + ':' + seconds
 }
