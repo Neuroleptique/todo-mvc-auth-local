@@ -55,12 +55,12 @@
 
                             <td>
                                 <span>
-                                    <%= todos[i].date || todos[i].Date %>
+                                    <%= new Date(todos[i].Date).toDateString() || new Date(todos[i].date).toDateString() %>
                                 </span>
                             </td>
                             <td>
                                 <span>
-                                    <% if(Math.ceil((new Date().getTime() - new Date(todos[i].Date).getTime()) / (1000*60*60*24) ) <= 5)  { %>
+                                    <% if(Math.ceil((new Date().getTime() - new Date(todos[i].Date).getTime()) / (1000*60*60*24) ) >= 5)  { %>
                                         Urgent!
                                     <% } %>
                                     
